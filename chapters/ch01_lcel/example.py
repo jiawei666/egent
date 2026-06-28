@@ -31,11 +31,11 @@ translate_chain = (
 )
 
 # 组合 pipeline：word → definition → translation → 合并输出
+# RunnablePassthrough.assign 把当前 state 的所有字段 + 新字段一起传下去
+# translate_chain 输入需要 {"definition": ...}，而当前 state 已有该字段，可直接传入
 pipeline = (
     RunnablePassthrough.assign(definition=define_chain)
-    | RunnablePassthrough.assign(
-        translation=lambda x: translate_chain.invoke({"definition": x["definition"]})
-    )
+    | RunnablePassthrough.assign(translation=translate_chain)
     | (lambda x: f"英文解释: {x['definition']}\n中文翻译: {x['translation']}")
 )
 
