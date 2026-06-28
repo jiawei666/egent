@@ -14,6 +14,7 @@
 
 验收标准：pipeline.invoke({"word": "ephemeral"}) 输出包含上述三个字段
 """
+from re import X
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
@@ -34,17 +35,26 @@ define_chain = (
 
 # TODO 2: 创建 translate_chain，输入 {"definition": ...}，输出中文翻译（字符串）
 translate_chain = (
-  ChatPromptTemplate.from_messages([("system", "你是一个英语字典专家，解释英语词语或句子的意思, 只需要返回他的意思"), ("user", "词语：{word}")]) |
+  ChatPromptTemplate.from_messages([("system", "你是一个翻译专家，把英文翻译成中文"), ("user", "英文：{english}")]) |
   model |
   parser
 )  # 替换这行
 
 # TODO 3: 创建 example_chain，输入 {"word": ...}，输出一个英文例句（字符串）
-example_chain = None  # 替换这行
+example_chain = (
+  ChatPromptTemplate.from_messages([("system", "你是一个英文专家，把给出的英文单词造三个例句"), ("user", "单词：{word}")]) |
+  model |
+  parser
+)  # 替换这行
 
 # TODO 4: 用 RunnablePassthrough.assign 把三个 chain 组合成一个 pipeline
 # 最终 lambda 把结果格式化成包含三个字段的字符串
-pipeline = define_chain  # 替换这行
+pipeline = (
+  RunnablePassthrough.assign(english=define_chain) |
+  RunnablePassthrough.assign(translate=translate_chain) |
+   RunnablePassthrough.assign(example=example_chain) |
+   (lambda x: f"单词：{x["word"]}\n英文解释: {x["english"]}\n中文解释: {x["translate"]}\n例句: {x["example"]}")
+)  # 替换这行
 
 if __name__ == "__main__":
     result = pipeline.invoke({"word": "ephemeral"})
