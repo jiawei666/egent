@@ -1,6 +1,6 @@
 """第 4 章练习题参考答案"""
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.tools import tool
 from langchain import hub
 from langchain.agents import create_react_agent, AgentExecutor
@@ -24,7 +24,7 @@ def get_time(timezone: str) -> str:
     except Exception:
         return f"Unknown timezone: {timezone}"
 
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+model = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0)
 tools = [get_weather, get_time]
 prompt = hub.pull("hwchase17/react")
 agent = create_react_agent(model, tools, prompt)

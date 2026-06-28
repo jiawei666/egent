@@ -1,9 +1,9 @@
 """第 5 章练习题参考答案"""
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.tools import tool
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.agents import create_openai_tools_agent, AgentExecutor
+from langchain.agents import create_tool_calling_agent, AgentExecutor
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_community.chat_message_histories import ChatMessageHistory
 
@@ -15,7 +15,7 @@ def get_weather(city: str) -> str:
     data = {"Beijing": "12°C, cloudy", "Shanghai": "28°C, sunny", "Harbin": "−5°C, snowy"}
     return data.get(city, f"{city}: data not available")
 
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+model = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0)
 tools = [get_weather]
 
 prompt = ChatPromptTemplate.from_messages([
@@ -25,7 +25,7 @@ prompt = ChatPromptTemplate.from_messages([
     MessagesPlaceholder(variable_name="agent_scratchpad"),
 ])
 
-agent = create_openai_tools_agent(model, tools, prompt)
+agent = create_tool_calling_agent(model, tools, prompt)
 executor = AgentExecutor(agent=agent, tools=tools, verbose=False)
 
 store = {}

@@ -2,7 +2,7 @@
 import asyncio
 from dotenv import load_dotenv
 from typing import TypedDict
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.tools import tool
@@ -15,7 +15,7 @@ load_dotenv()
 # LANGCHAIN_API_KEY=your_api_key
 # LANGCHAIN_PROJECT=langchain-learning
 
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+model = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0)
 parser = StrOutputParser()
 
 class State(TypedDict):

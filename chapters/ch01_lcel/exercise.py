@@ -15,28 +15,36 @@
 验收标准：pipeline.invoke({"word": "ephemeral"}) 输出包含上述三个字段
 """
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 
 load_dotenv()
 
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+model = ChatAnthropic(model="glm-5.2", temperature=0)
 parser = StrOutputParser()
 
 # TODO 1: 创建 define_chain，输入 {"word": ...}，输出单词的英文解释（字符串）
-define_chain = None  # 替换这行
+define_chain = (
+  ChatPromptTemplate.from_messages([("system", "你是一个英语字典专家，解释英语词语或句子的意思, 只需要返回他的英文意思，用英文返回"), ("user", "词语：{word}")]) |
+  model |
+  parser
+)  # 替换这行
 
 # TODO 2: 创建 translate_chain，输入 {"definition": ...}，输出中文翻译（字符串）
-translate_chain = None  # 替换这行
+translate_chain = (
+  ChatPromptTemplate.from_messages([("system", "你是一个英语字典专家，解释英语词语或句子的意思, 只需要返回他的意思"), ("user", "词语：{word}")]) |
+  model |
+  parser
+)  # 替换这行
 
 # TODO 3: 创建 example_chain，输入 {"word": ...}，输出一个英文例句（字符串）
 example_chain = None  # 替换这行
 
 # TODO 4: 用 RunnablePassthrough.assign 把三个 chain 组合成一个 pipeline
 # 最终 lambda 把结果格式化成包含三个字段的字符串
-pipeline = None  # 替换这行
+pipeline = define_chain  # 替换这行
 
 if __name__ == "__main__":
     result = pipeline.invoke({"word": "ephemeral"})

@@ -13,9 +13,9 @@ ReAct 循环：
 ```python
 from langchain import hub
 from langchain.agents import create_react_agent, AgentExecutor
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
-model = ChatOpenAI(model="gpt-4o-mini")
+model = ChatAnthropic(model="claude-haiku-4-5-20251001")
 tools = [get_weather, get_time]
 
 # 从 hub 拉取标准 ReAct prompt（包含 agent_scratchpad 占位符）

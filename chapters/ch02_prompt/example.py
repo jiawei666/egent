@@ -1,6 +1,6 @@
 """第 2 章示例：代码评审 bot，返回 Pydantic 结构体"""
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
@@ -13,7 +13,7 @@ class CodeReview(BaseModel):
     suggestion: str = Field(description="One key improvement suggestion")
 
 parser = PydanticOutputParser(pydantic_object=CodeReview)
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+model = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0)
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a senior Python code reviewer. Review the code and respond in the required format.\n{format_instructions}"),

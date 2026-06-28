@@ -19,12 +19,12 @@
   对下面的测试简历，result.name 包含"张伟"，result.skills 是非空列表
 """
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 
 load_dotenv()
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+model = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0)
 
 # TODO 1: 定义 ResumeInfo Pydantic 模型（5 个字段）
 

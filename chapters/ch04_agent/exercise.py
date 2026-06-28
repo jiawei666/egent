@@ -14,7 +14,7 @@
   - Final Answer 包含时间和天气两个信息
 """
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.tools import tool
 from langchain import hub
 from langchain.agents import create_react_agent, AgentExecutor

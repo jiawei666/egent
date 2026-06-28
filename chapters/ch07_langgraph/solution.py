@@ -1,13 +1,13 @@
 """第 7 章练习题参考答案"""
 from dotenv import load_dotenv
 from typing import TypedDict
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langgraph.graph import StateGraph, START, END
 
 load_dotenv()
-model = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
+model = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0.7)
 parser = StrOutputParser()
 
 class State(TypedDict):

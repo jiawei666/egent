@@ -6,14 +6,14 @@
 
 ```python
 from pydantic import BaseModel, Field
-from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
 
 class Person(BaseModel):
     name: str = Field(description="Person's full name")
     age: int = Field(description="Person's age")
     city: str = Field(description="City where person lives")
 
-model = ChatOpenAI(model="gpt-4o-mini")
+model = ChatAnthropic(model="claude-haiku-4-5-20251001")
 structured_model = model.with_structured_output(Person)
 
 result = structured_model.invoke("John is 30 years old and lives in New York.")
